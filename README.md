@@ -201,41 +201,6 @@ Sample Response:
 - ADX: 28.4 showing strong trend, RSI healthy at 58.7
 ```
 
-### Historical Context & Follow-ups
-
-#### **Contextual Follow-up**
-```bash
-Previous: "Analyze SPY order flow"
-Current: "What about the VIX correlation?"
-
-Expected Behavior:
-- System remembers SPY context from previous query
-- Automatically analyzes VIX vs SPY order flow correlation
-- Provides comparative analysis without re-asking for ticker
-
-Tools Called:
-├─ financial_technical_analysis(ticker="VIX")
-├─ analyze_order_flow_tool(ticker="SPY") [cached from previous]
-└─ correlation_analysis(symbols=["SPY", "VIX"])
-```
-
-#### **Performance Tracking**
-```bash
-Query: "How did that SPY trade from this morning work out?"
-
-Expected Behavior:
-- Retrieves previous SPY recommendations from conversation history
-- Compares entry/target prices with current market data
-- Calculates theoretical P&L and accuracy
-
-Sample Response:
-**TRADE REVIEW - SPY Call Entry at 472.25**
-**STATUS:** TARGET HIT ✅
-**ENTRY:** 472.25 (11:23 AM)
-**EXIT:** 477.15 (12:45 PM) 
-**P&L:** +2.1% gain in 82 minutes
-**ACCURACY:** Signal valid, target reached in expected timeframe
-```
 
 ### Advanced Multi-Asset Queries
 
@@ -258,79 +223,6 @@ Sample Response:
 **TRADE IDEA:** Long XLF, Short XLK (pairs trade)
 ```
 
-#### **Earnings Play Setup**
-```bash
-Query: "AAPL earnings tomorrow - analyze options positioning and set alerts"
-
-Expected Tools Called:
-├─ get_options_flow(ticker="AAPL", expiration="this_week")
-├─ configure_options_monitoring_tool(ticker="AAPL", unusual_activity=true)
-├─ financial_technical_analysis(ticker="AAPL")
-└─ earnings_volatility_analysis(ticker="AAPL")
-
-Sample Response:
-**EARNINGS SETUP - AAPL**
-**IMPLIED MOVE:** ±4.2% ($182.50-$197.80)
-**OPTIONS POSITIONING:**
-- Call/Put ratio: 1.8:1 (bullish bias)
-- Max pain: $190 (current: $190.15)
-- Gamma exposure: $2.8B in calls 185-195 strikes
-**ALERTS SET:**
-- Break above $192.50 = momentum continuation
-- Break below $187.50 = bearish reversal
-- Unusual options activity >$1M premium
-```
-
-### System Commands & Monitoring
-
-#### **Real-time Monitoring**
-```bash
-Query: "Monitor SPY, QQQ, and VIX - alert on significant moves"
-
-Expected Behavior:
-- Sets up continuous monitoring for specified tickers
-- Defines threshold parameters for "significant moves"
-- Provides periodic updates without manual queries
-
-System Response:
-**MONITORING ACTIVE:**
-- SPY: Alert on >0.5% moves, volume >2x average
-- QQQ: Alert on >0.6% moves, unusual options activity  
-- VIX: Alert on >10% intraday change
-- Update frequency: 5 minutes
-- Monitoring duration: Until market close
-```
-
-#### **Performance Dashboard**
-```bash
-Query: "Show today's trading signals performance"
-
-Expected Response:
-**DAILY PERFORMANCE SUMMARY:**
-**Signals Generated:** 8
-**Accuracy Rate:** 75% (6/8 correct)
-**Average Return:** +1.4% per signal
-**Best Trade:** NVDA calls +3.2% (45min hold)
-**Worst Trade:** TSLA puts -1.8% (stopped out)
-**Risk Management:** All stops honored, max drawdown 1.8%
-```
-
-## 📈 Sample Output
-
-```
-**SIGNAL:** BUY CALLS
-**CONVICTION:** 85/100 (4 confirming signals)
-**ENTRY:** $472.50 (exact price)
-**STOP:** $469.75 (max 2% account risk)
-**TARGET:** $478.00 (minimum 2:1 R/R)
-**TIMEFRAME:** 45 minutes validity
-**INVALIDATION:** $469.50 breaks thesis
-**EVIDENCE:** 
-- Order flow: 73% institutional buying pressure
-- Volume profile: POC at 472.25, strong support
-- ORB: Clean breakout above 15min range
-- Options flow: 2.3:1 call/put ratio, unusual activity
-```
 
 ## 🏗️ System Architecture
 
@@ -426,7 +318,7 @@ Expected Response:
 │  ┌─────────────────────────────────────────────────────────────────────────────┐   │
 │  │                      WEBSOCKET CLIENT POOL                                  │   │
 │  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────────┐  │   │
-│  │  │   Prism WS      │  │   Market WS     │  │    Health Monitor           │  │   │
+│  │  │   3P WS         │  │   Market WS     │  │    Health Monitor           │  │   │
 │  │  │   Client        │  │   Client        │  │                             │  │   │
 │  │  │                 │  │                 │  │ • Connection monitoring     │  │   │
 │  │  │ • Real-time     │  │ • Level 2 data  │  │ • Auto-reconnection         │  │   │
@@ -444,7 +336,7 @@ Expected Response:
               ┌─────────────────────────┼─────────────────────────┐
               ▼                         ▼                         ▼
 ┌─────────────────────────┐  ┌─────────────────────────┐  ┌─────────────────────────┐
-│      PRISM API          │  │    TWELVE DATA API      │  │   POLYGON/OTHER APIs    │
+│      3P API             │  │    TWELVE DATA API      │  │   POLYGON/OTHER APIs    │
 ├─────────────────────────┤  ├─────────────────────────┤  ├─────────────────────────┤
 │ • Real-time options     │  │ • Stock market data     │  │ • Alternative feeds     │
 │ • Order flow data       │  │ • Technical indicators  │  │ • News sentiment        │
@@ -465,7 +357,7 @@ Expected Response:
 │  │  {                                                                          │   │
 │  │    "ANTHROPIC_API_KEY": "sk-ant-...",                                      │   │
 │  │    "CLAUDE_API_KEY": "sk-ant-...",                                         │   │
-│  │    "PRISM_API_KEY": "prism_key_...",                                       │   │
+│  │    "3P   _API_KEY": "3p_key_...",                                          │   │
 │  │    "TWELVE_DATA_API_KEY": "td_key_...",                                    │   │
 │  │    "AWS_ACCESS_KEY_ID": "AKIA...",                                         │   │
 │  │    "AWS_SECRET_ACCESS_KEY": "...",                                         │   │
@@ -548,50 +440,4 @@ TOOL 4: financial_technical_analysis(ticker="SPY")
      └─ Support/resistance levels
 ```
 
-**Step 4: Response Generation (300ms)**
-- Tool result aggregation and validation
-- Confluence analysis across data sources
-- Risk/reward calculation
-- Formatted trading decision output
-
-### Conversation History System
-
-#### **Purpose & Use Cases**
-
-**1. Context Continuity**
-```
-User: "Analyze SPY"
-Bot: [Provides comprehensive SPY analysis]
-
-User: "What about the options flow?" 
-Bot: [Knows we're still talking about SPY, provides options-specific data]
-
-User: "Compare that to yesterday"
-Bot: [References previous SPY analysis, shows comparison]
-```
-
-**2. Follow-up Analysis**
-```
-User: "Set alert for SPY above 475"
-Bot: [Sets monitoring parameters]
-
-30 minutes later...
-User: "Any updates?"
-Bot: [References alert context, provides status update]
-```
-
-**3. Strategy Evolution**
-```
-Session 1: "Show me NVDA technicals"
-Session 2: "How did that NVDA trade work out?" 
-Bot: [Recalls previous analysis, compares to current data]
-```
-
-**4. Risk Management Context**
-```
-User: "What positions did we discuss today?"
-Bot: [Summarizes all trading recommendations from session]
-
-User: "Show P&L if I took those trades"
-Bot: [Calculates theoretical performance based on history]
 ```
