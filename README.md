@@ -1,3 +1,5 @@
+Stay tuned: Full source code and detailed documentation are on the way! Follow the https://x.com/Sayantan317 for updates.
+
 # 🚀 Trade Copilot
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
