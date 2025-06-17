@@ -1,4 +1,4 @@
-Stay tuned: Full source code and detailed documentation are on the way! Follow the https://x.com/Sayantan317 for updates.
+Stay tuned: Full source code and detailed documentation are on the way! Follow  https://x.com/Sayantan317 for updates.
 
 # 🚀 Trade Copilot
 
