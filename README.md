@@ -12,6 +12,32 @@ Stay tuned: Full source code and detailed documentation are on the way! Follow  
 
 Trade Copilot is a trading assistant that combines institutional-grade market analysis with cutting-edge AI. Built on the Model Context Protocol (MCP), it provides real-time order flow analysis, options monitoring, and technical analysis through a clean, professional chat interface.
 
+## Tools Arsenel
+
+```mermaid
+mindmap
+  root((Trade Copilot<br/>))
+    Trading Memory
+      get_current_bias
+      check_consistency
+      store_trading_decision
+      force_reset
+    Technical Analysis
+      volume_profile
+      technical_analysis
+      technical_zones
+      orb_analysis
+      fvg_analysis
+    Order Flow
+      equity_order_flow
+      pattern_detection
+      options_order_flow
+      options_monitoring
+    Options Intelligence
+      open_interest_analysis
+      institutional_positioning
+      gamma_exposure
+```
 
 ## ✨ Key Features
 
